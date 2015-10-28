@@ -1,0 +1,6 @@
+*.elf
+*.srec
+*.bin
+*.hex
+*.o
+osuisp2/

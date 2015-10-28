@@ -1,0 +1,592 @@
+
+lab2.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000010  00800100  000003ce  00000462  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000003ce  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000014  00800110  00800110  00000472  2**0
+                  ALLOC
+  3 .stab         000007b0  00000000  00000000  00000474  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000d82  00000000  00000000  00000c24  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      00000011  00000000  00000000  000019a6  2**0
+                  CONTENTS, READONLY
+  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000019b8  2**2
+                  CONTENTS, READONLY
+  7 .debug_info   00000780  00000000  00000000  000019f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 00000718  00000000  00000000  00002174  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   0000001d  00000000  00000000  0000288c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000280  00000000  00000000  000028a9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 46 00 	jmp	0x8c	; 0x8c <__ctors_end>
+   4:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+   8:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+   c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  10:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  14:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  18:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  1c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  20:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  24:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  28:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  2c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  30:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  34:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  38:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  3c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  40:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  44:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  48:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  4c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  50:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  54:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  58:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  5c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  60:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  64:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  68:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  6c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  70:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  74:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  78:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  7c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  80:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  84:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  88:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+
+00000098 <__do_copy_data>:
+  98:	11 e0       	ldi	r17, 0x01	; 1
+  9a:	a0 e0       	ldi	r26, 0x00	; 0
+  9c:	b1 e0       	ldi	r27, 0x01	; 1
+  9e:	ee ec       	ldi	r30, 0xCE	; 206
+  a0:	f3 e0       	ldi	r31, 0x03	; 3
+  a2:	00 e0       	ldi	r16, 0x00	; 0
+  a4:	0b bf       	out	0x3b, r16	; 59
+  a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
+  a8:	07 90       	elpm	r0, Z+
+  aa:	0d 92       	st	X+, r0
+  ac:	a0 31       	cpi	r26, 0x10	; 16
+  ae:	b1 07       	cpc	r27, r17
+  b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
+
+000000b2 <__do_clear_bss>:
+  b2:	21 e0       	ldi	r18, 0x01	; 1
+  b4:	a0 e1       	ldi	r26, 0x10	; 16
+  b6:	b1 e0       	ldi	r27, 0x01	; 1
+  b8:	01 c0       	rjmp	.+2      	; 0xbc <.do_clear_bss_start>
+
+000000ba <.do_clear_bss_loop>:
+  ba:	1d 92       	st	X+, r1
+
+000000bc <.do_clear_bss_start>:
+  bc:	a4 32       	cpi	r26, 0x24	; 36
+  be:	b2 07       	cpc	r27, r18
+  c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
+  c2:	0e 94 30 01 	call	0x260	; 0x260 <main>
+  c6:	0c 94 e5 01 	jmp	0x3ca	; 0x3ca <_exit>
+
+000000ca <__bad_interrupt>:
+  ca:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000ce <debounce_switch>:
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  ce:	8f e3       	ldi	r24, 0x3F	; 63
+  d0:	9f e1       	ldi	r25, 0x1F	; 31
+  d2:	01 97       	sbiw	r24, 0x01	; 1
+  d4:	f1 f7       	brne	.-4      	; 0xd2 <debounce_switch+0x4>
+  d6:	00 c0       	rjmp	.+0      	; 0xd8 <debounce_switch+0xa>
+  d8:	00 00       	nop
+//*******************************************************************************
+uint8_t debounce_switch() 
+{
+    // Debounce 8ms  
+    _delay_ms(2); 
+    PORTA = 0xFF; // Display Off
+  da:	8f ef       	ldi	r24, 0xFF	; 255
+  dc:	8b bb       	out	0x1b, r24	; 27
+    DDRA = 0x00; // DDRA to input
+  de:	1a ba       	out	0x1a, r1	; 26
+    PORTB = (7<<4); // Enable tristate for button board usage
+  e0:	80 e7       	ldi	r24, 0x70	; 112
+  e2:	88 bb       	out	0x18, r24	; 24
+  e4:	e4 e1       	ldi	r30, 0x14	; 20
+  e6:	f1 e0       	ldi	r31, 0x01	; 1
+  e8:	60 e0       	ldi	r22, 0x00	; 0
+  ea:	70 e0       	ldi	r23, 0x00	; 0
+    // Button press shift register
+    static uint16_t SR[8] = {0,0,0,0,0,0,0,0}; 
+    uint8_t i = 0;
+    uint8_t ret_val = 9;
+  ec:	89 e0       	ldi	r24, 0x09	; 9
+  ee:	05 c0       	rjmp	.+10     	; 0xfa <debounce_switch+0x2c>
+  f0:	6f 5f       	subi	r22, 0xFF	; 255
+  f2:	7f 4f       	sbci	r23, 0xFF	; 255
+    for (i=0; i<8; i++) 
+  f4:	68 30       	cpi	r22, 0x08	; 8
+  f6:	71 05       	cpc	r23, r1
+  f8:	e9 f0       	breq	.+58     	; 0x134 <debounce_switch+0x66>
+    {
+        // bit_is_clear() returns a one when button pushed
+        SR[i] = (SR[i] << 1) | bit_is_clear(PINA, i);
+  fa:	29 b3       	in	r18, 0x19	; 25
+  fc:	30 e0       	ldi	r19, 0x00	; 0
+  fe:	06 2e       	mov	r0, r22
+ 100:	02 c0       	rjmp	.+4      	; 0x106 <debounce_switch+0x38>
+ 102:	35 95       	asr	r19
+ 104:	27 95       	ror	r18
+ 106:	0a 94       	dec	r0
+ 108:	e2 f7       	brpl	.-8      	; 0x102 <debounce_switch+0x34>
+ 10a:	21 70       	andi	r18, 0x01	; 1
+ 10c:	33 27       	eor	r19, r19
+ 10e:	91 e0       	ldi	r25, 0x01	; 1
+ 110:	29 27       	eor	r18, r25
+ 112:	40 81       	ld	r20, Z
+ 114:	51 81       	ldd	r21, Z+1	; 0x01
+ 116:	44 0f       	add	r20, r20
+ 118:	55 1f       	adc	r21, r21
+ 11a:	24 2b       	or	r18, r20
+ 11c:	35 2b       	or	r19, r21
+ 11e:	21 93       	st	Z+, r18
+ 120:	31 93       	st	Z+, r19
+        if (SR[i] == 0x000F) { ret_val = i; }
+ 122:	2f 30       	cpi	r18, 0x0F	; 15
+ 124:	31 05       	cpc	r19, r1
+ 126:	21 f7       	brne	.-56     	; 0xf0 <debounce_switch+0x22>
+ 128:	86 2f       	mov	r24, r22
+ 12a:	6f 5f       	subi	r22, 0xFF	; 255
+ 12c:	7f 4f       	sbci	r23, 0xFF	; 255
+    PORTB = (7<<4); // Enable tristate for button board usage
+    // Button press shift register
+    static uint16_t SR[8] = {0,0,0,0,0,0,0,0}; 
+    uint8_t i = 0;
+    uint8_t ret_val = 9;
+    for (i=0; i<8; i++) 
+ 12e:	68 30       	cpi	r22, 0x08	; 8
+ 130:	71 05       	cpc	r23, r1
+ 132:	19 f7       	brne	.-58     	; 0xfa <debounce_switch+0x2c>
+    {
+        // bit_is_clear() returns a one when button pushed
+        SR[i] = (SR[i] << 1) | bit_is_clear(PINA, i);
+        if (SR[i] == 0x000F) { ret_val = i; }
+    }
+    DDRA = 0xFF; // set PORTA for output
+ 134:	9f ef       	ldi	r25, 0xFF	; 255
+ 136:	9a bb       	out	0x1a, r25	; 26
+    return ret_val;
+}
+ 138:	08 95       	ret
+
+0000013a <to_digs>:
+// Returns an array pointer
+// The array is a digit wise separation of numbers 0 to 3.
+// For example, passing num as 1234 will result in digs[0] = 4, digs[1] = 2, etc...
+//*******************************************************************************
+uint8_t * to_digs(uint16_t num) 
+{
+ 13a:	0f 93       	push	r16
+ 13c:	1f 93       	push	r17
+ 13e:	cf 93       	push	r28
+ 140:	df 93       	push	r29
+ 142:	ec 01       	movw	r28, r24
+                            0b10000010,   // 6
+                            0b11111000,   // 7
+                            0b10000000,   // 8
+                            0b10010000,   // 9
+                            0b11111111 }; // off
+    digs[0] = sev_seg[num       % 10];
+ 144:	00 e1       	ldi	r16, 0x10	; 16
+ 146:	11 e0       	ldi	r17, 0x01	; 1
+ 148:	9c 01       	movw	r18, r24
+ 14a:	ad ec       	ldi	r26, 0xCD	; 205
+ 14c:	bc ec       	ldi	r27, 0xCC	; 204
+ 14e:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 152:	ac 01       	movw	r20, r24
+ 154:	56 95       	lsr	r21
+ 156:	47 95       	ror	r20
+ 158:	56 95       	lsr	r21
+ 15a:	47 95       	ror	r20
+ 15c:	56 95       	lsr	r21
+ 15e:	47 95       	ror	r20
+ 160:	9a 01       	movw	r18, r20
+ 162:	22 0f       	add	r18, r18
+ 164:	33 1f       	adc	r19, r19
+ 166:	ca 01       	movw	r24, r20
+ 168:	88 0f       	add	r24, r24
+ 16a:	99 1f       	adc	r25, r25
+ 16c:	88 0f       	add	r24, r24
+ 16e:	99 1f       	adc	r25, r25
+ 170:	88 0f       	add	r24, r24
+ 172:	99 1f       	adc	r25, r25
+ 174:	82 0f       	add	r24, r18
+ 176:	93 1f       	adc	r25, r19
+ 178:	fe 01       	movw	r30, r28
+ 17a:	e8 1b       	sub	r30, r24
+ 17c:	f9 0b       	sbc	r31, r25
+ 17e:	eb 5f       	subi	r30, 0xFB	; 251
+ 180:	fe 4f       	sbci	r31, 0xFE	; 254
+ 182:	80 81       	ld	r24, Z
+ 184:	f8 01       	movw	r30, r16
+ 186:	80 83       	st	Z, r24
+    digs[1] = sev_seg[(num/10)  % 10];
+ 188:	9a 01       	movw	r18, r20
+ 18a:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 18e:	96 95       	lsr	r25
+ 190:	87 95       	ror	r24
+ 192:	96 95       	lsr	r25
+ 194:	87 95       	ror	r24
+ 196:	96 95       	lsr	r25
+ 198:	87 95       	ror	r24
+ 19a:	9c 01       	movw	r18, r24
+ 19c:	22 0f       	add	r18, r18
+ 19e:	33 1f       	adc	r19, r19
+ 1a0:	88 0f       	add	r24, r24
+ 1a2:	99 1f       	adc	r25, r25
+ 1a4:	88 0f       	add	r24, r24
+ 1a6:	99 1f       	adc	r25, r25
+ 1a8:	88 0f       	add	r24, r24
+ 1aa:	99 1f       	adc	r25, r25
+ 1ac:	82 0f       	add	r24, r18
+ 1ae:	93 1f       	adc	r25, r19
+ 1b0:	48 1b       	sub	r20, r24
+ 1b2:	59 0b       	sbc	r21, r25
+ 1b4:	fa 01       	movw	r30, r20
+ 1b6:	eb 5f       	subi	r30, 0xFB	; 251
+ 1b8:	fe 4f       	sbci	r31, 0xFE	; 254
+ 1ba:	80 81       	ld	r24, Z
+ 1bc:	f8 01       	movw	r30, r16
+ 1be:	81 83       	std	Z+1, r24	; 0x01
+    digs[2] = sev_seg[(num/100) % 10];
+ 1c0:	9e 01       	movw	r18, r28
+ 1c2:	36 95       	lsr	r19
+ 1c4:	27 95       	ror	r18
+ 1c6:	36 95       	lsr	r19
+ 1c8:	27 95       	ror	r18
+ 1ca:	ab e7       	ldi	r26, 0x7B	; 123
+ 1cc:	b4 e1       	ldi	r27, 0x14	; 20
+ 1ce:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 1d2:	ac 01       	movw	r20, r24
+ 1d4:	56 95       	lsr	r21
+ 1d6:	47 95       	ror	r20
+ 1d8:	9a 01       	movw	r18, r20
+ 1da:	ad ec       	ldi	r26, 0xCD	; 205
+ 1dc:	bc ec       	ldi	r27, 0xCC	; 204
+ 1de:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 1e2:	96 95       	lsr	r25
+ 1e4:	87 95       	ror	r24
+ 1e6:	96 95       	lsr	r25
+ 1e8:	87 95       	ror	r24
+ 1ea:	96 95       	lsr	r25
+ 1ec:	87 95       	ror	r24
+ 1ee:	9c 01       	movw	r18, r24
+ 1f0:	22 0f       	add	r18, r18
+ 1f2:	33 1f       	adc	r19, r19
+ 1f4:	88 0f       	add	r24, r24
+ 1f6:	99 1f       	adc	r25, r25
+ 1f8:	88 0f       	add	r24, r24
+ 1fa:	99 1f       	adc	r25, r25
+ 1fc:	88 0f       	add	r24, r24
+ 1fe:	99 1f       	adc	r25, r25
+ 200:	82 0f       	add	r24, r18
+ 202:	93 1f       	adc	r25, r19
+ 204:	48 1b       	sub	r20, r24
+ 206:	59 0b       	sbc	r21, r25
+ 208:	fa 01       	movw	r30, r20
+ 20a:	eb 5f       	subi	r30, 0xFB	; 251
+ 20c:	fe 4f       	sbci	r31, 0xFE	; 254
+ 20e:	80 81       	ld	r24, Z
+ 210:	f8 01       	movw	r30, r16
+ 212:	82 83       	std	Z+2, r24	; 0x02
+    digs[3] = sev_seg[(num/1000)     ];
+ 214:	9e 01       	movw	r18, r28
+ 216:	36 95       	lsr	r19
+ 218:	27 95       	ror	r18
+ 21a:	36 95       	lsr	r19
+ 21c:	27 95       	ror	r18
+ 21e:	36 95       	lsr	r19
+ 220:	27 95       	ror	r18
+ 222:	a5 ec       	ldi	r26, 0xC5	; 197
+ 224:	b0 e2       	ldi	r27, 0x20	; 32
+ 226:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 22a:	92 95       	swap	r25
+ 22c:	82 95       	swap	r24
+ 22e:	8f 70       	andi	r24, 0x0F	; 15
+ 230:	89 27       	eor	r24, r25
+ 232:	9f 70       	andi	r25, 0x0F	; 15
+ 234:	89 27       	eor	r24, r25
+ 236:	fc 01       	movw	r30, r24
+ 238:	eb 5f       	subi	r30, 0xFB	; 251
+ 23a:	fe 4f       	sbci	r31, 0xFE	; 254
+ 23c:	80 81       	ld	r24, Z
+ 23e:	f8 01       	movw	r30, r16
+ 240:	83 83       	std	Z+3, r24	; 0x03
+    return digs;
+}
+ 242:	c8 01       	movw	r24, r16
+ 244:	df 91       	pop	r29
+ 246:	cf 91       	pop	r28
+ 248:	1f 91       	pop	r17
+ 24a:	0f 91       	pop	r16
+ 24c:	08 95       	ret
+
+0000024e <set_disp>:
+    static uint8_t decode[5] = { 0,   // 000 disp 0
+                                 1,   // 001 disp 1
+                                 3,   // 011 colon 
+                                 4,   // 100 disp 2
+                                 2 }; // 101 disp 3
+    PORTB = (decode[disp]<<4); 
+ 24e:	e8 2f       	mov	r30, r24
+ 250:	f0 e0       	ldi	r31, 0x00	; 0
+ 252:	e0 50       	subi	r30, 0x00	; 0
+ 254:	ff 4f       	sbci	r31, 0xFF	; 255
+ 256:	80 81       	ld	r24, Z
+ 258:	82 95       	swap	r24
+ 25a:	80 7f       	andi	r24, 0xF0	; 240
+ 25c:	88 bb       	out	0x18, r24	; 24
+ 25e:	08 95       	ret
+
+00000260 <main>:
+// If low for 4 passes of debounc_switch() increment counter.
+// Display number on all four digits of the LED display board.
+//*******************************************************************************
+int main()
+{
+    DDRB = 0xFF; // Set to output
+ 260:	8f ef       	ldi	r24, 0xFF	; 255
+ 262:	87 bb       	out	0x17, r24	; 23
+    DDRA = 0xFF; // Set to output
+ 264:	8a bb       	out	0x1a, r24	; 26
+
+    PORTA = 0xFF; // Turn of LEDs
+ 266:	8b bb       	out	0x1b, r24	; 27
+ 268:	91 e0       	ldi	r25, 0x01	; 1
+
+    uint16_t cnt = 0;
+ 26a:	e1 2c       	mov	r14, r1
+ 26c:	f1 2c       	mov	r15, r1
+ 26e:	81 e0       	ldi	r24, 0x01	; 1
+ 270:	00 e0       	ldi	r16, 0x00	; 0
+ 272:	10 e0       	ldi	r17, 0x00	; 0
+ 274:	c0 e0       	ldi	r28, 0x00	; 0
+ 276:	d0 e0       	ldi	r29, 0x00	; 0
+    uint8_t state = 0;
+    while(1) // loop forever
+    { 
+        // rotate state
+        state++;
+        state %= 4;
+ 278:	83 70       	andi	r24, 0x03	; 3
+ 27a:	d8 2e       	mov	r13, r24
+    static uint8_t decode[5] = { 0,   // 000 disp 0
+                                 1,   // 001 disp 1
+                                 3,   // 011 colon 
+                                 4,   // 100 disp 2
+                                 2 }; // 101 disp 3
+    PORTB = (decode[disp]<<4); 
+ 27c:	92 95       	swap	r25
+ 27e:	90 7f       	andi	r25, 0xF0	; 240
+ 280:	98 bb       	out	0x18, r25	; 24
+                            0b10000010,   // 6
+                            0b11111000,   // 7
+                            0b10000000,   // 8
+                            0b10010000,   // 9
+                            0b11111111 }; // off
+    digs[0] = sev_seg[num       % 10];
+ 282:	97 01       	movw	r18, r14
+ 284:	ad ec       	ldi	r26, 0xCD	; 205
+ 286:	bc ec       	ldi	r27, 0xCC	; 204
+ 288:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 28c:	ac 01       	movw	r20, r24
+ 28e:	56 95       	lsr	r21
+ 290:	47 95       	ror	r20
+ 292:	56 95       	lsr	r21
+ 294:	47 95       	ror	r20
+ 296:	56 95       	lsr	r21
+ 298:	47 95       	ror	r20
+ 29a:	9a 01       	movw	r18, r20
+ 29c:	22 0f       	add	r18, r18
+ 29e:	33 1f       	adc	r19, r19
+ 2a0:	ca 01       	movw	r24, r20
+ 2a2:	88 0f       	add	r24, r24
+ 2a4:	99 1f       	adc	r25, r25
+ 2a6:	88 0f       	add	r24, r24
+ 2a8:	99 1f       	adc	r25, r25
+ 2aa:	88 0f       	add	r24, r24
+ 2ac:	99 1f       	adc	r25, r25
+ 2ae:	82 0f       	add	r24, r18
+ 2b0:	93 1f       	adc	r25, r19
+ 2b2:	f7 01       	movw	r30, r14
+ 2b4:	e8 1b       	sub	r30, r24
+ 2b6:	f9 0b       	sbc	r31, r25
+ 2b8:	eb 5f       	subi	r30, 0xFB	; 251
+ 2ba:	fe 4f       	sbci	r31, 0xFE	; 254
+ 2bc:	80 81       	ld	r24, Z
+ 2be:	80 93 10 01 	sts	0x0110, r24
+    digs[1] = sev_seg[(num/10)  % 10];
+ 2c2:	9a 01       	movw	r18, r20
+ 2c4:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 2c8:	96 95       	lsr	r25
+ 2ca:	87 95       	ror	r24
+ 2cc:	96 95       	lsr	r25
+ 2ce:	87 95       	ror	r24
+ 2d0:	96 95       	lsr	r25
+ 2d2:	87 95       	ror	r24
+ 2d4:	9c 01       	movw	r18, r24
+ 2d6:	22 0f       	add	r18, r18
+ 2d8:	33 1f       	adc	r19, r19
+ 2da:	88 0f       	add	r24, r24
+ 2dc:	99 1f       	adc	r25, r25
+ 2de:	88 0f       	add	r24, r24
+ 2e0:	99 1f       	adc	r25, r25
+ 2e2:	88 0f       	add	r24, r24
+ 2e4:	99 1f       	adc	r25, r25
+ 2e6:	82 0f       	add	r24, r18
+ 2e8:	93 1f       	adc	r25, r19
+ 2ea:	48 1b       	sub	r20, r24
+ 2ec:	59 0b       	sbc	r21, r25
+ 2ee:	fa 01       	movw	r30, r20
+ 2f0:	eb 5f       	subi	r30, 0xFB	; 251
+ 2f2:	fe 4f       	sbci	r31, 0xFE	; 254
+ 2f4:	80 81       	ld	r24, Z
+ 2f6:	80 93 11 01 	sts	0x0111, r24
+    digs[2] = sev_seg[(num/100) % 10];
+ 2fa:	98 01       	movw	r18, r16
+ 2fc:	ab e7       	ldi	r26, 0x7B	; 123
+ 2fe:	b4 e1       	ldi	r27, 0x14	; 20
+ 300:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 304:	ac 01       	movw	r20, r24
+ 306:	56 95       	lsr	r21
+ 308:	47 95       	ror	r20
+ 30a:	9a 01       	movw	r18, r20
+ 30c:	ad ec       	ldi	r26, 0xCD	; 205
+ 30e:	bc ec       	ldi	r27, 0xCC	; 204
+ 310:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 314:	96 95       	lsr	r25
+ 316:	87 95       	ror	r24
+ 318:	96 95       	lsr	r25
+ 31a:	87 95       	ror	r24
+ 31c:	96 95       	lsr	r25
+ 31e:	87 95       	ror	r24
+ 320:	9c 01       	movw	r18, r24
+ 322:	22 0f       	add	r18, r18
+ 324:	33 1f       	adc	r19, r19
+ 326:	88 0f       	add	r24, r24
+ 328:	99 1f       	adc	r25, r25
+ 32a:	88 0f       	add	r24, r24
+ 32c:	99 1f       	adc	r25, r25
+ 32e:	88 0f       	add	r24, r24
+ 330:	99 1f       	adc	r25, r25
+ 332:	82 0f       	add	r24, r18
+ 334:	93 1f       	adc	r25, r19
+ 336:	48 1b       	sub	r20, r24
+ 338:	59 0b       	sbc	r21, r25
+ 33a:	fa 01       	movw	r30, r20
+ 33c:	eb 5f       	subi	r30, 0xFB	; 251
+ 33e:	fe 4f       	sbci	r31, 0xFE	; 254
+ 340:	80 81       	ld	r24, Z
+ 342:	80 93 12 01 	sts	0x0112, r24
+    digs[3] = sev_seg[(num/1000)     ];
+ 346:	9e 01       	movw	r18, r28
+ 348:	a5 ec       	ldi	r26, 0xC5	; 197
+ 34a:	b0 e2       	ldi	r27, 0x20	; 32
+ 34c:	0e 94 d6 01 	call	0x3ac	; 0x3ac <__umulhisi3>
+ 350:	92 95       	swap	r25
+ 352:	82 95       	swap	r24
+ 354:	8f 70       	andi	r24, 0x0F	; 15
+ 356:	89 27       	eor	r24, r25
+ 358:	9f 70       	andi	r25, 0x0F	; 15
+ 35a:	89 27       	eor	r24, r25
+ 35c:	fc 01       	movw	r30, r24
+ 35e:	eb 5f       	subi	r30, 0xFB	; 251
+ 360:	fe 4f       	sbci	r31, 0xFE	; 254
+ 362:	80 81       	ld	r24, Z
+ 364:	80 93 13 01 	sts	0x0113, r24
+        state++;
+        state %= 4;
+        
+        // display one digit per cycle
+        set_disp(state);
+        PORTA = to_digs(cnt)[state];
+ 368:	ed 2d       	mov	r30, r13
+ 36a:	f0 e0       	ldi	r31, 0x00	; 0
+ 36c:	e0 5f       	subi	r30, 0xF0	; 240
+ 36e:	fe 4f       	sbci	r31, 0xFE	; 254
+ 370:	80 81       	ld	r24, Z
+ 372:	8b bb       	out	0x1b, r24	; 27
+    
+        // check button board
+        if (debounce_switch()<8)   { cnt++; }
+ 374:	0e 94 67 00 	call	0xce	; 0xce <debounce_switch>
+ 378:	88 30       	cpi	r24, 0x08	; 8
+ 37a:	78 f4       	brcc	.+30     	; 0x39a <main+0x13a>
+ 37c:	8f ef       	ldi	r24, 0xFF	; 255
+ 37e:	e8 1a       	sub	r14, r24
+ 380:	f8 0a       	sbc	r15, r24
+ 382:	87 01       	movw	r16, r14
+ 384:	16 95       	lsr	r17
+ 386:	07 95       	ror	r16
+ 388:	16 95       	lsr	r17
+ 38a:	07 95       	ror	r16
+ 38c:	e7 01       	movw	r28, r14
+ 38e:	d6 95       	lsr	r29
+ 390:	c7 95       	ror	r28
+ 392:	d6 95       	lsr	r29
+ 394:	c7 95       	ror	r28
+ 396:	d6 95       	lsr	r29
+ 398:	c7 95       	ror	r28
+ 39a:	81 e0       	ldi	r24, 0x01	; 1
+ 39c:	8d 0d       	add	r24, r13
+ 39e:	e8 2f       	mov	r30, r24
+ 3a0:	e3 70       	andi	r30, 0x03	; 3
+ 3a2:	f0 e0       	ldi	r31, 0x00	; 0
+ 3a4:	e0 50       	subi	r30, 0x00	; 0
+ 3a6:	ff 4f       	sbci	r31, 0xFF	; 255
+ 3a8:	90 81       	ld	r25, Z
+ 3aa:	66 cf       	rjmp	.-308    	; 0x278 <main+0x18>
+
+000003ac <__umulhisi3>:
+ 3ac:	a2 9f       	mul	r26, r18
+ 3ae:	b0 01       	movw	r22, r0
+ 3b0:	b3 9f       	mul	r27, r19
+ 3b2:	c0 01       	movw	r24, r0
+ 3b4:	a3 9f       	mul	r26, r19
+ 3b6:	70 0d       	add	r23, r0
+ 3b8:	81 1d       	adc	r24, r1
+ 3ba:	11 24       	eor	r1, r1
+ 3bc:	91 1d       	adc	r25, r1
+ 3be:	b2 9f       	mul	r27, r18
+ 3c0:	70 0d       	add	r23, r0
+ 3c2:	81 1d       	adc	r24, r1
+ 3c4:	11 24       	eor	r1, r1
+ 3c6:	91 1d       	adc	r25, r1
+ 3c8:	08 95       	ret
+
+000003ca <_exit>:
+ 3ca:	f8 94       	cli
+
+000003cc <__stop_program>:
+ 3cc:	ff cf       	rjmp	.-2      	; 0x3cc <__stop_program>
