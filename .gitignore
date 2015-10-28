@@ -3,4 +3,6 @@
 *.bin
 *.hex
 *.o
+*.map
+*.lst
 osuisp2/
