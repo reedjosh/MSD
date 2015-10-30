@@ -9,10 +9,10 @@
 #include <avr/cpufunc.h>
 #include <util/delay.h>
 
-uint16_t cnt = 0;
+volatile uint8_t flag = 0;
 
 //*******************************************************************************
-//                                                          debounce_switch                                  
+//                                                          debounce_switch               
 // Check pushbuttons on PORTA. 
 // Returns which button was pressed 0-7.
 //*******************************************************************************
@@ -40,6 +40,26 @@ uint8_t debounce_switch()
 
     DDRA = save_a; 
     return ret_val;
+}
+
+//*******************************************************************************
+//                                                          state_check
+// Uses a for loop to return the bit number current state. 
+// If two state bits are set, this will return a 8 to represent a false.
+//*******************************************************************************
+uint8_t state_check(uint8_t state_reg)
+{
+    uint8_t i = 0;
+    uint8_t state = 0;
+    for(i=0; i<8; i++)
+    {
+        if ((state_reg>>i)&1) 
+        {
+            if (state==0) { state = i; }
+            else {state = 8;}
+        }
+    }
+    return state;
 }
 
 //*******************************************************************************
@@ -81,7 +101,7 @@ void set_disp(uint8_t disp)
                                  3,   // 011 colon 
                                  4,   // 100 disp 2
                                  2 }; // 101 disp 3
-    PORTB = (decode[disp]<<4); 
+    PORTB = (decode[disp]<<4) | (PORTB & 0b10001111); 
 }
 
 //*******************************************************************************
@@ -90,17 +110,15 @@ void set_disp(uint8_t disp)
 // PIN E 7 is sh/ld which is active low to load
 // PIN E 6 is clk_inhibit which inhibits the clock when held high
 //*******************************************************************************
-uint8_t spi_read() 
+uint8_t spi_cycle(uint8_t write_val) 
 {
-    static uint8_t temp = 0;
     PORTE = 0b01111111; // load data
     PORTE = 0b10000000; // set as shift reg and enable the clk
-    SPDR = temp; // Send data
+    SPDR = write_val; // Send data
     while (bit_is_clear(SPSR, SPIF)){} // SPI sreg, sflag
     PORTB |= 0b00000001; // Strobe high
     PORTB &= 0b11111110; // Strobe low
-    temp = SPDR;
-    return temp;
+    return SPDR;
 }
 
 //***********************************************************************
@@ -114,50 +132,7 @@ uint8_t spi_read()
 //***********************************************************************
 ISR(TIMER0_OVF_vect) 
 { 
-    static uint8_t multiplier = 1;
-    static uint8_t ec_state = 0;
-    uint8_t temp = 0;
-    uint8_t ec1_curr = 0;
-    uint8_t ec1_prev = 0;
-    uint8_t ec2_curr = 0;
-    uint8_t ec2_prev = 0;
-
-    // Check buttons
-    temp = debounce_switch();
-    if (temp<8) { multiplier = temp; }
-    
-    ec_state = (ec_state << 4);
-    ec_state |= ~spi_read();
-    ec1_prev = (ec_state & 0b00110000)>>4;
-    ec1_curr =  ec_state & 0b00000011;
-    ec2_prev = (ec_state & 0b11000000)>>6;
-    ec2_curr = (ec_state & 0b00001100)>>2 ;
-    if (ec1_prev != ec1_curr) 
-    {
-        if ( (ec1_prev == 0b11) && (ec1_curr == 0b01) ) 
-        {   
-            if (multiplier + cnt >= 1023) { cnt = 1023; } 
-            else { cnt += multiplier; }
-        }
-        else if ( (ec1_prev == 0b11) && (ec1_curr == 0b10) ) 
-        {   
-            if (multiplier >= cnt) { cnt = 0; } 
-            else { cnt -= multiplier; }
-        }
-    }
-    if (ec2_prev != ec2_curr) 
-    {
-        if ( (ec2_prev == 0b11) && (ec2_curr == 0b01) ) 
-        {   
-            if (multiplier + cnt >= 1023) { cnt = 1023; } 
-            else { cnt += multiplier; }
-        }
-        else if ( (ec2_prev == 0b11) && (ec2_curr == 0b10) ) 
-        {   
-            if (multiplier >= cnt) { cnt = 0; } 
-            else { cnt -= multiplier; }
-        }
-    }
+    flag = 1;
 }
 
 //*******************************************************************************
@@ -189,6 +164,16 @@ void tcntr_setup()
 int main()
 {
     uint8_t state = 0;
+    uint8_t multiplier = 1;
+    uint8_t ec_state = 0;
+    uint8_t mult_state = 0;
+    uint8_t temp = 0;
+    uint8_t temp2 = 0;
+    uint8_t ec1_curr = 0;
+    uint8_t ec1_prev = 0;
+    uint8_t ec2_curr = 0;
+    uint8_t ec2_prev = 0;
+    uint16_t cnt = 0;
 
     DDRB = 0b11110111; // Set to output except input on spi pin 3
     DDRE = 0xFF; // Set to output
@@ -209,6 +194,55 @@ int main()
         PORTA = to_digs(cnt)[state];
         _delay_us(15); // delay with the leds on
         PORTA = 0xFF; // turn leds off
+
+        if (flag) 
+        {
+            // Check buttons
+            temp = debounce_switch();
+            if ( temp<8 ) { multiplier = temp; }
+
+            mult_state ^= (1<<temp);
+            temp2 = state_check(mult_state);
+
+            ec_state = (ec_state << 4);
+            ec_state |= ~spi_cycle(mult_state);
+            if (temp2 > 7) { multiplier = 0; }
+            else {multiplier = temp2;}
+            
+            
+
+            ec1_prev = (ec_state & 0b00110000)>>4;
+            ec1_curr =  ec_state & 0b00000011;
+            ec2_prev = (ec_state & 0b11000000)>>6;
+            ec2_curr = (ec_state & 0b00001100)>>2 ;
+            if (ec1_prev != ec1_curr) 
+            {
+                if ( (ec1_prev == 0b11) && (ec1_curr == 0b01) ) 
+                {   
+                    if (multiplier + cnt >= 1023) { cnt = 1023; } 
+                    else { cnt += multiplier; }
+                }
+                else if ( (ec1_prev == 0b11) && (ec1_curr == 0b10) ) 
+                {   
+                    if (multiplier >= cnt) { cnt = 0; } 
+                    else { cnt -= multiplier; }
+                }
+            }
+            if (ec2_prev != ec2_curr) 
+            {
+                if ( (ec2_prev == 0b11) && (ec2_curr == 0b01) ) 
+                {   
+                    if (multiplier + cnt >= 1023) { cnt = 1023; } 
+                    else { cnt += multiplier; }
+                }
+                else if ( (ec2_prev == 0b11) && (ec2_curr == 0b10) ) 
+                {   
+                    if (multiplier >= cnt) { cnt = 0; } 
+                    else { cnt -= multiplier; }
+                }
+            }
+        flag = 0;
+        }
     }  
 } 
 
