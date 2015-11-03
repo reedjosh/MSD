@@ -1,8 +1,24 @@
 // OregonState EECS
 // Microcontroller System Design
-// lab3_code.c 
+// lab4_code.c 
 // Joshua Reed
-// Oct. 20, 2015
+// Nov. 3, 2015
+//
+// Inclass Notes
+//
+// TCNT0 - realtime clock, 32khz, seconds tick
+// 
+// TCNT2 - pwm source to dim LED's and...? Frequency? (Maybe hinting at speakers)
+//       - use fast pwm
+// 
+// TCNT1 - alarm Sound
+//       - slow 1khz
+//
+// PWM should be much faster than refresh rate of LED display - about 10khz
+//
+//
+//
+//
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
