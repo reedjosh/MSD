@@ -218,14 +218,10 @@ int main()
             {
                 lcd_lock = 1;
                 uart_putc('a');
-                for(i=0; i<12; i++)
-                {
-                    stuff[i] = uart_getc();
-                }
-                for(i=0; i<12; i++)
-                {
-                    char2lcd(stuff[i]);
-                }
+                stuff[0] = uart_getc();
+                stuff[1] = uart_getc();
+                char2lcd(stuff[0]);
+                char2lcd(stuff[1]);
                 cursor_home();
                 lcd_lock = 0;
 
@@ -239,15 +235,15 @@ int main()
                 if (alarm_set && comp_times(curr_time, alarm_time)) { alarm_trg = 1; }
                 if (alarm_set && alarm_trg) { OCR3A = volume; }
                 else { OCR3A = 1; }
-                if (al_set_trg != alarm_set)
-                {   
-                    lcd_lock = 1;
-                    al_set_trg = alarm_set;
-                    if (alarm_set) {string2lcd("Alarm Set");}
-                    else { clear_display(); }
-                    cursor_home();
-                    lcd_lock = 0;
-                }
+                //if (al_set_trg != alarm_set)
+                //{   
+                //    lcd_lock = 1;
+                //    al_set_trg = alarm_set;
+                //    if (alarm_set) {string2lcd("Alarm Set");}
+                //    else { clear_display(); }
+                //    cursor_home();
+                //    lcd_lock = 0;
+                //}
             }
 
     }  
