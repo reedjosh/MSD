@@ -41,8 +41,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include "libs/lcd_functions.h"
-#include "libs/lm73_functions.h"
-#include "libs/twi_master.h"
+//#include "libs/lm73_functions.h"
+//#include "libs/twi_master.h"
 #include "libs/uart_functions.h"
 
 // Global status variables
@@ -198,16 +198,17 @@ int main()
 {
     uint8_t sec_trg = 0;
     uint8_t al_set_trg = 0;
-    DDRB = 0b11110111; // Set to output accept input on spi pin 3
-    DDRE = 0xFF; // Set to output
+    int i = 0;
+    char stuff[40];
+    DDRE = 0b11111101; // Set to output
     DDRA = 0xFF; // Set to output
     DDRF |= 1<<PF3;
     tcntr_setup();
     spi_setup();
+    lcd_init();
     adc_init();
     uart_init();
     sei();
-    cursor_off();
 
     while(1) // Loop forever
     { 
@@ -215,12 +216,24 @@ int main()
             
             if (sec_trg != sec) 
             {
+                lcd_lock = 1;
+                uart_putc('a');
+                for(i=0; i<12; i++)
+                {
+                    stuff[i] = uart_getc();
+                }
+                for(i=0; i<12; i++)
+                {
+                    char2lcd(stuff[i]);
+                }
+                cursor_home();
+                lcd_lock = 0;
+
                 // Track the second clock for edges 
                 sec_trg = sec;
+
                 if (snooze_timer > 0) { snooze_timer--; }  
-                lcd_lock = 1;
-                char2lcd(uart_getc());
-                lcd_lock = 0;
+
                 // Increment the current time by one second
                 curr_time = inc_time(curr_time);
                 if (alarm_set && comp_times(curr_time, alarm_time)) { alarm_trg = 1; }
@@ -229,13 +242,10 @@ int main()
                 if (al_set_trg != alarm_set)
                 {   
                     lcd_lock = 1;
-                    lcd_init();
-                    clear_display();
                     al_set_trg = alarm_set;
-                    //if (alarm_set) { char2lcd(uart_getc()); }
-                    //if (alarm_set) { string2lcd( "Alarm Set"); }
-                    //else { clear_display(); }
-                    spi_setup();
+                    if (alarm_set) {string2lcd("Alarm Set");}
+                    else { clear_display(); }
+                    cursor_home();
                     lcd_lock = 0;
                 }
             }
@@ -454,6 +464,7 @@ uint8_t spi_cycle(uint8_t write_val)
 //*******************************************************************************
 void spi_setup()
 {
+    DDRB |= 0b11110111; // Set to output accept input on spi pin 3
     SPCR |= (1 << SPE) | (1 << MSTR); // SPI ctr reg -- SPI enable, MSTR
     SPSR |= (1 << SPI2X); // SPI status reg -- set clk/2
 }
