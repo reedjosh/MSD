@@ -41,8 +41,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include "libs/lcd_functions.h"
-//#include "libs/lm73_functions.h"
-//#include "libs/twi_master.h"
+#include "libs/lm73_functions.h"
+#include "libs/twi_master.h"
 #include "libs/uart_functions.h"
 
 // Global status variables
@@ -55,6 +55,7 @@ uint8_t alarm_set = 0;
 uint8_t alarm_trg = 0;
 uint8_t snooze_timer = 0;
 uint8_t lcd_lock = 0;
+char remote_temp[2] = {"22"};
 
 // Seven segment decoder array
 volatile uint8_t sev_seg[11] = { 0b11000000,   // 0 // Seven segment decoder array
@@ -196,34 +197,51 @@ ISR(ADC_vect)
 //*******************************************************************************
 int main()
 {
+    extern uint8_t lm73_wr_buf[2];
+    extern uint8_t lm73_rd_buf[2];
     uint8_t sec_trg = 0;
     uint8_t al_set_trg = 0;
-    int i = 0;
-    char stuff[40];
     DDRE = 0b11111101; // Set to output
     DDRA = 0xFF; // Set to output
     DDRF |= 1<<PF3;
     tcntr_setup();
     spi_setup();
+    init_twi();
     lcd_init();
     adc_init();
     uart_init();
     sei();
-
+    lm73_wr_buf[0] = LM73_PTR_TEMP;
+    twi_start_wr(LM73_WRITE, lm73_wr_buf, 1);
+    uint16_t lm73_temp;
+    char stuff [2];
+    cursor_off();
     while(1) // Loop forever
     { 
         disp_time();
             
             if (sec_trg != sec) 
             {
-                lcd_lock = 1;
                 uart_putc('a');
-                stuff[0] = uart_getc();
-                stuff[1] = uart_getc();
-                char2lcd(stuff[0]);
-                char2lcd(stuff[1]);
+                remote_temp[0] = uart_getc();
+                remote_temp[1] = uart_getc();
+                lcd_lock = 1;
                 cursor_home();
+                _delay_ms(1);
+                char2lcd(remote_temp[0]);
+                char2lcd(remote_temp[1]);
+                char2lcd(' ');
+                twi_start_rd(LM73_READ, lm73_rd_buf, 2);
+                _delay_us(50);
+                lm73_temp = (lm73_rd_buf[0]<<8); //save high temperature byte into lm73_temp
+                lm73_temp |= lm73_rd_buf[1]; //"OR" in the low temp byte to lm73_temp 
+                lm73_temp = (lm73_temp>>7);
+                itoa(lm73_temp, stuff, 10); //convert to string in array with itoa() from avr-libc
+                string2lcd(stuff);
+                _delay_ms(1);
                 lcd_lock = 0;
+                
+    
 
                 // Track the second clock for edges 
                 sec_trg = sec;
@@ -235,15 +253,19 @@ int main()
                 if (alarm_set && comp_times(curr_time, alarm_time)) { alarm_trg = 1; }
                 if (alarm_set && alarm_trg) { OCR3A = volume; }
                 else { OCR3A = 1; }
-                //if (al_set_trg != alarm_set)
-                //{   
-                //    lcd_lock = 1;
-                //    al_set_trg = alarm_set;
-                //    if (alarm_set) {string2lcd("Alarm Set");}
-                //    else { clear_display(); }
-                //    cursor_home();
-                //    lcd_lock = 0;
-                //}
+                if (al_set_trg != alarm_set)
+                {   
+                    lcd_lock = 1;
+                    al_set_trg = alarm_set;
+                    if (alarm_set) 
+                    {
+                        home_line2();
+                        _delay_ms(1);
+                        string2lcd("Alarm Set");
+                    }
+                    else { clear_display(); }
+                    lcd_lock = 0;
+                }
             }
 
     }  
@@ -255,9 +277,13 @@ int main()
 // returns  0 if none of the encoders have been rotated
 // returns  1 if left  encoder has been rotated clockwise
 // returns  2 if right encoder has been rotated clockwise
+extern uint8_t lm73_wr_buf[2]; 
+extern uint8_t lm73_rd_buf[2];
 // returns -1 if left  encoder has been rotated counter-clockwise
 // returns -2 if right encoder has been rotated counter-clockwise
 //*******************************************************************************
+extern uint8_t lm73_wr_buf[2]; 
+extern uint8_t lm73_rd_buf[2];
 int8_t _enc()
 {
     static uint8_t ec_state = 0; // state of encoders
@@ -306,6 +332,8 @@ uint8_t check_buttons()
     static uint16_t SReg[8] = {0}; 
     // State Variable
     static uint8_t button = 0;
+extern uint8_t lm73_wr_buf[2]; 
+extern uint8_t lm73_rd_buf[2];
 
     uint8_t ret_val = 8;
     
@@ -342,6 +370,8 @@ void play_alarm()
     if (snooze_timer == 0) {TCCR1B |= (1<<CS11) | (1<<CS10);}
 }
 
+extern uint8_t lm73_wr_buf[2]; 
+extern uint8_t lm73_rd_buf[2];
 //*******************************************************************************
 //                                                          stop_alarm
 //*******************************************************************************

@@ -1,8 +1,8 @@
 PRG             =lab5
 
-OBJS            =$(PRG).o  libs/lcd_functions.o libs/lm73_functions.o libs/twi_master.o libs/uart_functions.o 
+OBJS            =$(PRG).o  libs/si4734.o libs/lcd_functions.o libs/lm73_functions.o libs/twi_master.o libs/uart_functions.o 
 
-SRCS            =$(PRG).c  libs/lcd_functions.c libs/lm73_functions.c libs/twi_master.c libs/uart_functions.c
+SRCS            =$(PRG).c  libs/lcd_functions.c libs/lm73_functions.c libs/twi_master.c libs/uart_functions.c libs/si4734.c
 
 MCU_TARGET     = atmega128
 
@@ -26,7 +26,7 @@ override LDFLAGS       = -Wl,-Map,$(PRG).map
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-all: $(PRG).elf lst text #eeprom
+all: $(PRG).elf lst text eeprom
 
 $(PRG).elf: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
@@ -43,7 +43,7 @@ clean:
 
 # setup for usb programmer
 program: $(PRG).hex
-	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
+	avrdude  -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
 
 lst:  $(PRG).lst
 
@@ -64,3 +64,22 @@ srec: $(PRG).srec
 
 %.bin: %.elf
 	$(OBJCOPY) -j .text -j .data -O binary $< $@
+
+
+# Rules for building the .eeprom rom images
+
+eeprom: ehex ebin esrec
+
+ehex:  $(PRG)_eeprom.hex
+ebin:  $(PRG)_eeprom.bin
+esrec: $(PRG)_eeprom.srec
+
+%_eeprom.hex: %.elf
+	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O ihex $< $@
+
+%_eeprom.srec: %.elf
+	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O srec $< $@
+
+%_eeprom.bin: %.elf
+	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O binary $< $@
+
