@@ -2,7 +2,7 @@
 // Roger Traylor 11.28.10
 
 #include <util/twi.h>
-#include "lm73_functions_skel.h"
+#include "lm73_functions.h"
 #include <util/delay.h>
 
 //TODO: remove volatile type modifier?  I think so.
@@ -22,6 +22,6 @@ uint8_t lm73_temp_convert(char temp_digits[], uint16_t lm73_temp, uint8_t f_not_
 // TODO:Returns what???(uint8_t)??? Probably a BUG?
 
 // Yeah, this is for you to do! ;^)
-
+    return 8;
 }//lm73_temp_convert
 //******************************************************************************

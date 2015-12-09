@@ -36,12 +36,16 @@
 // PORTB(2)                 DIN
 //
 
+#include <stdlib.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "lcd.h"
-#include <stdlib.h>
+#include "libs/lcd_functions.h"
+#include "libs/lm73_functions.h"
+#include "libs/twi_master.h"
+#include "libs/uart_functions.h"
 
+// Global status variables
 uint8_t flag = 0;
 uint8_t half_sec = 0;
 uint8_t sec = 0;
@@ -52,6 +56,7 @@ uint8_t alarm_trg = 0;
 uint8_t snooze_timer = 0;
 uint8_t lcd_lock = 0;
 
+// Seven segment decoder array
 volatile uint8_t sev_seg[11] = { 0b11000000,   // 0 // Seven segment decoder array
                                  0b11111001,   // 1
                                  0b10100100,   // 2
@@ -63,6 +68,8 @@ volatile uint8_t sev_seg[11] = { 0b11000000,   // 0 // Seven segment decoder arr
                                  0b10000000,   // 8
                                  0b10010000,   // 9
                                  0b11111111 }; // off
+
+// Time struct {hour, minute, second}
 typedef struct 
 {
     int8_t hr;
@@ -70,6 +77,7 @@ typedef struct
     int8_t sec; 
 } time;
 
+// Global time variables
 time zero = {0,0,0};
 time min_plus = {0,1,0};
 time min_less = {0,-1,0};
@@ -90,6 +98,7 @@ void tcntr_setup();
 void spi_setup();
 time inc_time(time a);
 time add_times(time a, time b);
+
 
 volatile uint8_t time_cnt = 0;
 //***********************************************************************
@@ -196,7 +205,9 @@ int main()
     tcntr_setup();
     spi_setup();
     adc_init();
+    uart_init();
     sei();
+    cursor_off();
 
     while(1) // Loop forever
     { 
@@ -207,7 +218,9 @@ int main()
                 // Track the second clock for edges 
                 sec_trg = sec;
                 if (snooze_timer > 0) { snooze_timer--; }  
-
+                lcd_lock = 1;
+                char2lcd(uart_getc());
+                lcd_lock = 0;
                 // Increment the current time by one second
                 curr_time = inc_time(curr_time);
                 if (alarm_set && comp_times(curr_time, alarm_time)) { alarm_trg = 1; }
@@ -219,8 +232,9 @@ int main()
                     lcd_init();
                     clear_display();
                     al_set_trg = alarm_set;
-                    if (alarm_set) { string2lcd( "Alarm Set"); }
-                    else { clear_display(); }
+                    //if (alarm_set) { char2lcd(uart_getc()); }
+                    //if (alarm_set) { string2lcd( "Alarm Set"); }
+                    //else { clear_display(); }
                     spi_setup();
                     lcd_lock = 0;
                 }

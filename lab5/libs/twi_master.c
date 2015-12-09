@@ -6,7 +6,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define F_CPU 16000000UL
 #include <util/twi.h>
 #include <stdlib.h>
 #include "twi_master.h"
@@ -101,12 +100,12 @@ void twi_start_rd(uint8_t twi_addr, uint8_t *twi_data, uint8_t byte_cnt){
 //
 //Uses PD1 as SDA and PD0 as SCL
 //10K pullups are present on the board
-//for alarm clock an additional 4.7K resistor is also there for pullup
+//For the alarm clock, an additional 4.7K resistor is also there for pullup
 //******************************************************************************
 
 void init_twi(){
   TWDR = 0xFF;     //release SDA, default contents
   TWSR = 0x00;     //prescaler value = 1
   TWBR = TWI_TWBR; //defined in twi_master.h 
-} 
+}
 

@@ -1,17 +1,16 @@
-PRG             =lab5
+PRG             =main
 
-OBJS            =$(PRG).o  libs/lcd_functions.o libs/lm73_functions.o libs/twi_master.o libs/uart_functions.o 
+OBJS            =$(PRG).o uart_functions_m48.o   
 
-SRCS            =$(PRG).c  libs/lcd_functions.c libs/lm73_functions.c libs/twi_master.c libs/uart_functions.c
+SRCS            =$(PRG).c  uart_functions_m48.c
 
-MCU_TARGET     = atmega128
+MCU_TARGET     = atmega48
 
-PROGRAMMER_TARGET     = m128
+PROGRAMMER_TARGET     = m48
 
-#agressive optimization
 OPTIMIZE       = -O2    # options are 1, 2, 3, s
 
-F_CPU          = 16000000UL
+F_CPU          = 8000000UL
 
 DEFS           =
 LIBS           =
@@ -43,7 +42,7 @@ clean:
 
 # setup for usb programmer
 program: $(PRG).hex
-	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
+	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -p m48 -e -U flash:w:$(PRG).hex 
 
 lst:  $(PRG).lst
 
@@ -65,22 +64,3 @@ srec: $(PRG).srec
 %.bin: %.elf
 	$(OBJCOPY) -j .text -j .data -O binary $< $@
 
-# Rules for building the .eeprom rom images
-
-#eeprom: ehex ebin esrec
-#
-#ehex:  $(PRG)_eeprom.hex
-#ebin:  $(PRG)_eeprom.bin
-#esrec: $(PRG)_eeprom.srec
-#
-#%_eeprom.hex: %.elf
-#	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O ihex $< $@ \
-#	|| { echo empty $@ not generated; exit 0; }
-#
-#%_eeprom.srec: %.elf
-#	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O srec $< $@ \
-#	|| { echo empty $@ not generated; exit 0; }
-#
-#%_eeprom.bin: %.elf
-#	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O binary $< $@ \
-#	|| { echo empty $@ not generated; exit 0; }

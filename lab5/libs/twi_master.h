@@ -7,6 +7,13 @@
 
 #define TWI_TWBR 0x0C  //400khz TWI clock
 
+//TODO: try these some day...
+//set bit rate for TWI
+//TWBR must be > 10 for correct operation
+//TWPS must be 0, for prescaler = 1
+//#define SCL_CLOCK  100000L
+//#define TWI_TWBR ( ((F_CPU/SCL_CLOCK) -16) / 2  ) 
+
 #define NO_INTERRUPTS  0
 
 #if (NO_INTERRUPTS)

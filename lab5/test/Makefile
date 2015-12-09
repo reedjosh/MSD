@@ -1,8 +1,8 @@
-PRG             =lab5
+PRG             =main
 
-OBJS            =$(PRG).o  libs/lcd_functions.o libs/lm73_functions.o libs/twi_master.o libs/uart_functions.o 
+OBJS            =$(PRG).o  uart_functions.o lcd_functions.o
 
-SRCS            =$(PRG).c  libs/lcd_functions.c libs/lm73_functions.c libs/twi_master.c libs/uart_functions.c
+SRCS            =$(PRG).c  uart_functions.c lcd_functions.c
 
 MCU_TARGET     = atmega128
 
